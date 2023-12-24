@@ -6,24 +6,45 @@
     <title>Chat App</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js" integrity="sha512-Xm9qbB6Pu06k3PUwPj785dyTl6oHxgsv9nHp7ej7nCpAqGZT3OZpsELuCYX05DdonFpTlBpXMOxjavIAIUwr0w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script defer src="app.js"></script>
-    <style href="./style.css"></style>
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <div>
-        <div>
-            <div>
-                <div id="status">Waiting for a chat partner...</div>
-                <ul id="messages"></ul>
-                <form>
-                    <input type="text" id="message" placeholder="Type your message...">
-                    <button id="sendButton">Send</button>
-                </form>
-            </div>
-        </div>
+
+    <!-- <div class="firewall">
+        <h1>User Agreement</h1>
+        <p>Please read and review our <a href="termsandconditions.html">Terms and Conditions</a></p>
+        <form>
+            <input type="checkbox" id=userAgree" name="user-agreement" value="user-agreement">
+            <input type="submit" id="validate" value="Submit">
+        </form>
+    </div> -->
+
+    <div class="header">
+        <h1>Page Title</h1>
+    </div>
+
+
+    <div class="chat">
+        <div id="status">Waiting for a chat partner...</div>
+            <ul id="messages"></ul>
+            <form>
+                <input type="text" id="message" placeholder="Type your message...">
+                <button id="sendButton">Send</button>
+            </form>
     </div>
     <footer>
-        Chatroom Matt B
+        <ul>
+            <a href="termsandconditions.html"><li>Terms and Conditions</li></a>
+            <a href="privacy.html"><li>Privacy Policy</li></a>
+            <a href="contact.html"><li>Contact Us</li></a>
+            <a href="about.html"><li>About Us</li></a>
+            <li>Created with &#x2665; by Matthew </li>
+        </ul>        
     </footer>
+
+<script> 
+
+</script>
 </body>
 </html>
 

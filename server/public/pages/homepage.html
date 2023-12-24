@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <h1>This is the homepage</h1>
+    </header>
+
+    <!-- * This has to be age verification modal popup with terms and privacy agreement -->
+<div class="verify-form">
+    <header>
+        <p>blurb</p>
+        <form>
+            <input type="checkbox" id="user-agreement" name="user-agreement" value="user-agreement">
+            <input type="submit" value="Submit">
+        </form>
+    </header>
+</div>
+
+<script>
+    const verifyForm = document.querySelector('.verify-form');
+    const userAgreement = document.querySelector('#user-agreement');
+    const submit = document.querySelector('input[type="submit"]');
+
+    submit.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (userAgreement.checked) {
+            verifyForm.style.display = 'none';
+            window.location.href = 'index.html';
+        } else {
+            alert('Please agree to the terms and conditions');
+        }
+    });
+</script>
+</body>
+</html>
+
