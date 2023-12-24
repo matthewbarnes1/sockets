@@ -1,16 +1,35 @@
-const ws = require('ws');
-const server = new ws.Server({ port: 3000 });
+import { Server } from 'socket.io';
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-server.on('connection', socket => {
-    socket.on('message', message => {
-        const b = Buffer.from(message);
-        console.log(b.toString())
-        socket.send(`${message}`);
 
-    });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const PORT = process.env.PORT || 3500;
+
+const app = express();
+
+const expressServer = app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+
+
+app.use(express.static(path.join(__dirname, "public")));
+
+
+const io = new Server(expressServer, {
+    cors: {
+        origin: process.env.NODE_ENV === 
+        "production" ? false : ["http://localhost:5500", "http://127.0.0.1:5500"]
+    }
 });
 
 
+io.on('connection', socket => {
+    console.log(`User ${socket.id} connected`)
 
-
-
+    socket.on('message', data => {
+        console.log(data);
+        io.emit('message', `${socket.id.substring(0, 5)}: ${data}`);
+    });
+});
