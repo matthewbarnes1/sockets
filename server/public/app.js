@@ -1,24 +1,44 @@
 const socket = io('http://localhost:3500');
+let chatPartnerId = null;
 
+document.addEventListener('DOMContentLoaded', () => {
+    const messageInput = document.getElementById('message');
+    const sendButton = document.getElementById('sendButton');
+    const messagesList = document.getElementById('messages');
 
-function sendMessage(e){
-    e.preventDefault();
-    const input = document.querySelector('input');
-    if(input.value){
-        socket.emit('message', input.value);
-        input.value = '';
-    }
-    input.focus();
+    sendButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        const message = messageInput.value.trim();
+        if (chatPartnerId && message) {
+            sendPrivateMessage(chatPartnerId, message);
+            displayMessage('You', message); // Display your own message
+            messageInput.value = '';
+        }
+    });
+
+    socket.on('chat_partner', (partnerId) => {
+        chatPartnerId = partnerId;
+        const statusMessage = chatPartnerId ? `Connected to Stranger` : 'Waiting for a chat partner...';
+        updateStatus(statusMessage);
+    });
+
+    socket.on('private_message', (senderId, message) => {
+        displayMessage('Stranger', message); // Display received message
+    });
+});
+
+function sendPrivateMessage(recipientId, message) {
+    socket.emit('private_message', recipientId, message);
 }
 
-document.querySelector('form').addEventListener('submit', sendMessage);
-
-// Listen for messages
-socket.on('message', (data) => {
-    const li = document.createElement('li');
-    li.textContent = data;
-    document.querySelector('ul').appendChild(li);
+function displayMessage(sender, message) {
+    const messagesList = document.getElementById('messages');
+    const messageElement = document.createElement('li');
+    messageElement.textContent = `${sender}: ${message}`;
+    messagesList.appendChild(messageElement);
 }
-);
 
-
+function updateStatus(message) {
+    const statusElement = document.getElementById('status');
+    statusElement.textContent = message;
+}
