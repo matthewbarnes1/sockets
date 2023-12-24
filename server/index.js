@@ -13,7 +13,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 const io = new Server(expressServer, {
     cors: {
-        origin: process.env.NODE_ENV === "production" ? false : ["http://localhost:5500", "http://127.0.0.1:5500"]
+        origin: process.env.NODE_ENV === "production" ? false : ["http://localhost:5500", "http://127.0.0.1:5500", 
+        "https://chitchat1.fly.dev", "66.241.124.226", "2a09:8280:1::1c:cbd7", "0.0.0.0:3000"]
     }
 });
 
