@@ -1,4 +1,4 @@
-const socket = io('http://localhost:8800');
+const socket = io('https://shark-app-5msr4.ondigitalocean.app/');
 let chatPartnerId = null;
 
 document.addEventListener('DOMContentLoaded', () => {
