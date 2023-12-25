@@ -1,5 +1,8 @@
-const socket = io('https://shark-app-5msr4.ondigitalocean.app/');
 let chatPartnerId = null;
+
+const socket = io("https://shark-app-5msr4.ondigitalocean.app/", {
+  transports: [ "websocket", "polling"] 
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     const messageInput = document.getElementById('message');
