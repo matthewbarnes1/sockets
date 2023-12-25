@@ -4,7 +4,6 @@ let chatPartnerId = null;
 document.addEventListener('DOMContentLoaded', () => {
     const messageInput = document.getElementById('message');
     const sendButton = document.getElementById('sendButton');
-    const messagesList = document.getElementById('messages');
 
     sendButton.addEventListener('click', (e) => {
         e.preventDefault();
