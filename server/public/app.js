@@ -1,6 +1,6 @@
 let chatPartnerId = null;
 
-const socket = io("https://shark-app-5msr4.ondigitalocean.app/", {
+const socket = io("https://shark-app-5msr4.ondigitalocean.app/", "68.183.153.115", {
   transports: [ "websocket", "polling"] 
 });
 
