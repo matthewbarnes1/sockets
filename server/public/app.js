@@ -1,6 +1,7 @@
 let chatPartnerId = null;
 
-const socket = io("68.183.144.1", {
+const socket = io("68.183.144.1",  {
+secure: true,
   transports: [ "websocket", "polling"] 
 });
 
