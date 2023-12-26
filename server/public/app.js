@@ -1,6 +1,6 @@
 let chatPartnerId = null;
 
-const socket = io("68.183.144.1",  {
+const socket = io("wss://68.183.144.1/socket.io/", "https://lionfish-app-tx9bi.ondigitalocean.app/",  {
 secure: true,
   transports: [ "websocket", "polling"] 
 });
@@ -45,3 +45,6 @@ function updateStatus(message) {
     const statusElement = document.getElementById('status');
     statusElement.textContent = message;
 }
+
+//* SSL certificate for security?? 
+//* Host through 
