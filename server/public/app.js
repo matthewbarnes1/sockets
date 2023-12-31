@@ -30,11 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
         displayMessage('Stranger', message);
     });
 
-    socket.on('partner_disconnected', (disconnectedUserId) => {
-        if (disconnectedUserId === chatPartnerId) {
-            updateStatus('Your chat partner has disconnected. Waiting for a new chat partner...');
-            chatPartnerId = null;
-        }
+    socket.on('partner_disconnected', () => {
+        updateStatus('Your chat partner has disconnected. Please refresh to start a new chat.');
+        chatPartnerId = null;
+        disableChat();
     });
 });
 
@@ -52,4 +51,12 @@ function displayMessage(sender, message) {
 function updateStatus(message) {
     const statusElement = document.getElementById('status');
     statusElement.textContent = message;
+}
+
+function disableChat() {
+    const messageInput = document.getElementById('message');
+    const sendButton = document.getElementById('sendButton');
+    messageInput.disabled = true;
+    sendButton.disabled = true;
+    messageInput.placeholder = "Chat ended";
 }

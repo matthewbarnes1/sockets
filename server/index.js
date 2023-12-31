@@ -31,8 +31,14 @@ io.on('connection', socket => {
 
     socket.on('disconnect', () => {
         console.log(`User ${socket.id} disconnected`);
+        if (socket.partnerId) {
+            io.to(socket.partnerId).emit('partner_disconnected');
+            const partnerSocket = connectedUsers.find(user => user.id === socket.partnerId);
+            if (partnerSocket) {
+                partnerSocket.partnerId = null; // Reset the partner's partnerId
+            }
+        }
         connectedUsers = connectedUsers.filter(user => user.id !== socket.id);
-        notifyPartnerOfDisconnection(socket.id);
         pairUsers();
     });
 });
@@ -45,11 +51,9 @@ function pairUsers() {
         console.log(`Pairing users ${user1.id} and ${user2.id}`);
         user1.emit('chat_partner', user2.id);
         user2.emit('chat_partner', user1.id);
-    }
-}
 
-function notifyPartnerOfDisconnection(disconnectedUserId) {
-    connectedUsers.forEach(user => {
-        user.emit('partner_disconnected', disconnectedUserId);
-    });
+        // Store each user's partner ID for easy access on disconnection
+        user1.partnerId = user2.id;
+        user2.partnerId = user1.id;
+    }
 }
