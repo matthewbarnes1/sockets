@@ -1,9 +1,10 @@
 let chatPartnerId = null;
 
-const socket = io("wss://68.183.144.1/socket.io/", "https://lionfish-app-tx9bi.ondigitalocean.app/",  {
-secure: true,
-  transports: [ "websocket", "polling"] 
+const socket = io("https://lionfish-app-tx9bi.ondigitalocean.app/", {
+    secure: true,
+    transports: [ "websocket", "polling"] 
 });
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const messageInput = document.getElementById('message');
