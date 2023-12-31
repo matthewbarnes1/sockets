@@ -17,31 +17,44 @@ const io = new Server(expressServer, {
     }
 });
 
-let waitingUser = null;
+let connectedUsers = [];
 
 io.on('connection', socket => {
     console.log(`User ${socket.id} connected`);
+    connectedUsers.push(socket);
 
-    if (waitingUser) {
-        // Pair the two users
-        socket.emit('chat_partner', waitingUser.id);
-        io.to(waitingUser.id).emit('chat_partner', socket.id);
-
-        // Clear the waiting user
-        waitingUser = null;
-    } else {
-        // Wait for a partner
-        waitingUser = socket;
-    }
+    // Pair the user immediately if possible
+    pairUsers();
 
     socket.on('private_message', (recipientId, message) => {
         socket.to(recipientId).emit('private_message', socket.id, message);
     });
 
     socket.on('disconnect', () => {
-        if (waitingUser && waitingUser.id === socket.id) {
-            waitingUser = null;
-        }
+        // Notify the chat partner about the disconnection
+        notifyPartnerOfDisconnection(socket.id);
+
+        // Remove the disconnected user from connectedUsers
+        connectedUsers = connectedUsers.filter(user => user.id !== socket.id);
         console.log(`User ${socket.id} disconnected`);
+
+        // Try to pair remaining users again
+        pairUsers();
     });
 });
+
+function pairUsers() {
+    while (connectedUsers.length >= 2) {
+        const user1 = connectedUsers.pop();
+        const user2 = connectedUsers.pop();
+
+        user1.emit('chat_partner', user2.id);
+        user2.emit('chat_partner', user1.id);
+    }
+}
+
+function notifyPartnerOfDisconnection(disconnectedUserId) {
+    connectedUsers.forEach(user => {
+        user.emit('partner_disconnected', disconnectedUserId);
+    });
+}
