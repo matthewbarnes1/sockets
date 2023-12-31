@@ -23,7 +23,6 @@ io.on('connection', socket => {
     console.log(`User ${socket.id} connected`);
     connectedUsers.push(socket);
 
-    // Pair the user immediately if possible
     pairUsers();
 
     socket.on('private_message', (recipientId, message) => {
@@ -31,14 +30,9 @@ io.on('connection', socket => {
     });
 
     socket.on('disconnect', () => {
-        // Notify the chat partner about the disconnection
-        notifyPartnerOfDisconnection(socket.id);
-
-        // Remove the disconnected user from connectedUsers
-        connectedUsers = connectedUsers.filter(user => user.id !== socket.id);
         console.log(`User ${socket.id} disconnected`);
-
-        // Try to pair remaining users again
+        connectedUsers = connectedUsers.filter(user => user.id !== socket.id);
+        notifyPartnerOfDisconnection(socket.id);
         pairUsers();
     });
 });
@@ -48,6 +42,7 @@ function pairUsers() {
         const user1 = connectedUsers.pop();
         const user2 = connectedUsers.pop();
 
+        console.log(`Pairing users ${user1.id} and ${user2.id}`);
         user1.emit('chat_partner', user2.id);
         user2.emit('chat_partner', user1.id);
     }

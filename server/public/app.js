@@ -2,9 +2,8 @@ let chatPartnerId = null;
 
 const socket = io("https://lionfish-app-tx9bi.ondigitalocean.app/", {
     secure: true,
-    transports: [ "websocket", "polling"] 
+    transports: ["websocket", "polling"]
 });
-
 
 document.addEventListener('DOMContentLoaded', () => {
     const messageInput = document.getElementById('message');
@@ -15,19 +14,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const message = messageInput.value.trim();
         if (chatPartnerId && message) {
             sendPrivateMessage(chatPartnerId, message);
-            displayMessage('You', message); // Display your own message
+            displayMessage('You', message);
             messageInput.value = '';
         }
     });
 
     socket.on('chat_partner', (partnerId) => {
         chatPartnerId = partnerId;
+        console.log(`Connected to chat partner with ID: ${partnerId}`);
         const statusMessage = chatPartnerId ? `Connected to Stranger` : 'Waiting for a chat partner...';
         updateStatus(statusMessage);
     });
 
     socket.on('private_message', (senderId, message) => {
-        displayMessage('Stranger', message); // Display received message
+        displayMessage('Stranger', message);
+    });
+
+    socket.on('partner_disconnected', (disconnectedUserId) => {
+        if (disconnectedUserId === chatPartnerId) {
+            updateStatus('Your chat partner has disconnected. Waiting for a new chat partner...');
+            chatPartnerId = null;
+        }
     });
 });
 
@@ -46,6 +53,3 @@ function updateStatus(message) {
     const statusElement = document.getElementById('status');
     statusElement.textContent = message;
 }
-
-//* SSL certificate for security?? 
-//* Host through 
